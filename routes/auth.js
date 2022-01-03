@@ -18,7 +18,7 @@ router.post('/login', async (req, res) => {
     const password = req.body.password;
 
     if (!username || !password) {
-        res.status(400).send(`Please provide a valid 'req.body.user' and 'req.body.pass'`);
+        res.status(400).send('Please provide a valid username and password');
         return;
     }
 
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
 
     if (success) {
         const token = jwt.sign(userdata, keys.jwtSecret, { algorithm: 'HS256' });
-        res.status(200).send({ token: token, });
+        res.status(200).send(token.toString());
     }
     else {
         res.status(401).send('Invalid username or password');
@@ -45,33 +45,34 @@ router.post('/', (req, res) => {
     if (!token) return res.status(403).send('Please provide an Authorization header');
     const authdata = this.auth(token);
     if (!authdata) return res.status(403).send('Invalid token');
-    res.status(200).send({ message: 'Authentication successful!', data: { user: authdata } });
+    res.status(200).send(authdata.username.toString());
 });
 
 router.post('/register', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    const bestScore = req.body.bestScore;
 
     if (!username || !password) {
-        res.status(400).send({ error: { code: 'ERRFIELDEMPTY', message: `Please provide a valid 'req.body.user' and 'req.body.pass'` } });
+        res.status(400).send('Please provide a valid username and password');
         return;
     }
 
     const exists = await User.find({ "username": username });
     if (exists.length !== 0) {
-        res.status(400).send({ message: 'Username already in use' });
+        res.status(400).send('Username already in use');
         return;
     }
 
     const salt = await bcrypt.genSalt();
     const hashed = await bcrypt.hash(password, salt);
-    if (!hashed) return res.status(500).send({ error: { code: 'ERRPASSHASHFAILED', message: 'An error occurred while hashing the password' } });
+    if (!hashed) return res.status(500).send('An error occurred while hashing the password');
 
-    const userdata = { username, password: hashed };
+    const userdata = { username, password: hashed, bestScore };
 
     const id = User.create(userdata)[0];
     userdata.id = id;
-    res.status(200).send({ message: 'Registration successful', data: { user: userdata } });
+    res.status(200).send('Registration successful');
 });
 
 function auth(token) {

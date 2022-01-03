@@ -1,0 +1,19 @@
+const express = require('express');
+const router = express.Router();
+const app = express();
+
+const User = require('../models/User');
+
+router.get('/', (req, res) => {
+    User.find().select({ password: 0, _id: 0, __v: 0 }).sort({ bestScore: -1 }).then((users) => {
+        res.send(users);
+    })
+});
+
+router.put('/edit', async (req, res) => {
+    User.findOneAndUpdate({ username: req.body.username }, { bestScore: req.body.bestScore }).catch(err =>
+        res.status(400).send('Unable to update the Database')
+    );
+});
+
+module.exports = router;
