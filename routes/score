@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.put('/edit', async (req, res) => {
-    User.findOneAndUpdate({ username: req.body.username }, { bestScore: req.body.bestScore }).catch(err =>
+    User.findOneAndUpdate({ username: req.body.username }, { bestScore: req.body.bestScore, coins: req.body.coins }).catch(err =>
         res.status(400).send('Unable to update the Database')
     );
 });
