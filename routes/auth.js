@@ -33,7 +33,8 @@ router.post('/login', async (req, res) => {
 
     if (success) {
         const token = jwt.sign(userdata, keys.jwtSecret, { algorithm: 'HS256' });
-        res.status(200).send(token.toString());
+        userdata["token"] = token;
+        res.status(200).send(JSON.stringify(userdata));
     }
     else {
         res.status(401).send('Invalid username or password');

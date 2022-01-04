@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     bestScore: {
         type: Number,
         required: true
+    },
+    coins: {
+        type: Number,
+        required: true
     }
 });
 

@@ -5,7 +5,7 @@ const app = express();
 const User = require('../models/User');
 
 router.get('/', (req, res) => {
-    User.find().select({ password: 0, _id: 0, __v: 0 }).sort({ bestScore: -1 }).then((users) => {
+    User.find().select({ password: 0, _id: 0, __v: 0, coins: 0 }).sort({ bestScore: -1 }).then((users) => {
         res.send(users);
     })
 });
