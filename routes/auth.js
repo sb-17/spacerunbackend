@@ -53,6 +53,7 @@ router.post('/register', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const bestScore = req.body.bestScore;
+    const coins = req.body.coins;
 
     if (!username || !password) {
         res.status(400).send('Please provide a valid username and password');
@@ -69,7 +70,7 @@ router.post('/register', async (req, res) => {
     const hashed = await bcrypt.hash(password, salt);
     if (!hashed) return res.status(500).send('An error occurred while hashing the password');
 
-    const userdata = { username, password: hashed, bestScore };
+    const userdata = { username, password: hashed, bestScore, coins };
 
     const id = User.create(userdata)[0];
     userdata.id = id;
