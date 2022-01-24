@@ -16,7 +16,15 @@ const UserSchema = new mongoose.Schema({
     coins: {
         type: Number,
         required: true
-    }
+    },
+    extraLife: {
+        type: Number,
+        required: true
+    },
+    doubleCoins: {
+        type: Number,
+        required: true
+    },
 });
 
 module.exports = User = mongoose.model('user', UserSchema);
